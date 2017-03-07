@@ -1,14 +1,15 @@
 const sanitizeHtml = require('sanitize-html');
 const _ = {
-  forOwn: require('lodash/forOwn')
+    forOwn: require('lodash/forOwn')
 }
 
-const InputSanitizer = function () {
+const InputSanitizer = function() {
     var relaxedOptions = {
         allowedTags: ['b', 'i', 'em', 'strong', 'a', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'li', 'ul',
-            'br', 'p', 'u'],
+            'br', 'p', 'u'
+        ],
         allowedAttributes: {
-            'a': ['href']
+            'a': ['href', 'target']
         }
     };
 
@@ -16,28 +17,28 @@ const InputSanitizer = function () {
         allowedTags: [],
         allowedAttributes: {},
         textFilter: function(text) {
-              return text.replace(/&amp;/, '&');
-            }
+            return text.replace(/&amp;/, '&');
+        }
     };
 
     function trimWhiteSpaces(blip) {
-      var processedBlip = {};
-      _.forOwn(blip, function(value, key) {
-        processedBlip[key.trim()] = value.trim();
-      });
-      return processedBlip;
+        var processedBlip = {};
+        _.forOwn(blip, function(value, key) {
+            processedBlip[key.trim()] = value.trim();
+        });
+        return processedBlip;
     }
 
     var self = {};
-    self.sanitize = function (rawBlip) {
-      var blip = trimWhiteSpaces(rawBlip);
-      blip.description = sanitizeHtml(blip.description, relaxedOptions);
-      blip.name = sanitizeHtml(blip.name, restrictedOptions);
-      blip.isNew = sanitizeHtml(blip.isNew, restrictedOptions);
-      blip.ring = sanitizeHtml(blip.ring, restrictedOptions);
-      blip.quadrant = sanitizeHtml(blip.quadrant, restrictedOptions);
+    self.sanitize = function(rawBlip) {
+        var blip = trimWhiteSpaces(rawBlip);
+        blip.description = sanitizeHtml(blip.description, relaxedOptions);
+        blip.name = sanitizeHtml(blip.name, restrictedOptions);
+        blip.isNew = sanitizeHtml(blip.isNew, restrictedOptions);
+        blip.ring = sanitizeHtml(blip.ring, restrictedOptions);
+        blip.quadrant = sanitizeHtml(blip.quadrant, restrictedOptions);
 
-      return blip;
+        return blip;
     };
 
     return self;
